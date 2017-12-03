@@ -9,13 +9,13 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-var protocol string
-var hostname string
-var port int16
 var timeoutInSeconds int
+var version string
+var printVersion bool
 
 func init() {
 	flag.IntVarP(&timeoutInSeconds, "timeout", "t", 5, "time out in seconds")
+	flag.BoolVarP(&printVersion, "version", "v", false, "print the version")
 }
 
 func main() {
@@ -27,14 +27,20 @@ func main() {
 
 	flag.Parse()
 
+	if printVersion {
+		fmt.Printf("health-check version: %s", version)
+		fmt.Println()
+		return
+	}
+
 	args := flag.Args()
 	if len(args) < 3 {
 		fmt.Println("health-check <tcp/udp> <ip> <port>")
 		os.Exit(1)
 	}
 
-	protocol = args[0]
-	hostname = args[1]
+	protocol := args[0]
+	hostname := args[1]
 	port, err := strconv.ParseUint(args[2], 10, 16)
 	if err != nil {
 		fmt.Println(err)
