@@ -4,42 +4,19 @@ release:
     owner: UnAfraid
     name: go-health-check
   name_template: '{{.Tag}}'
-brew:
-  commit_author:
-    name: goreleaserbot
-    email: goreleaser@carlosbecker.com
-  install: bin.install "go-health-check"
 builds:
-- goos:
-  - windows
-  - linux
-  - darwin
-  goarch:
-  - amd64
-  - 386
-  - arm
-  goarm:
-  - 6
-  - 7
-  main: .
-  ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
-  binary: go-health-check
-archive:
-  format: zip
-  name_template: '{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{
-    .Arm }}{{ end }}'
-  files:
-  - licence*
-  - LICENCE*
-  - license*
-  - LICENSE*
-  - readme*
-  - README*
-  - changelog*
-  - CHANGELOG*
-fpm:
-  bindir: /usr/local/bin
-snapshot:
-  name_template: SNAPSHOT-{{ .Commit }}
-checksum:
-  name_template: '{{ .ProjectName }}_{{ .Version }}_checksums.txt'
+  -
+    ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -extldflags "-static"
+    env:
+      - CGO_ENABLED=0
+    goos:
+     - windows
+     - linux
+     - darwin
+    goarch:
+     - amd64
+     - 386
+     - arm
+    goarm:
+     - 6
+     - 7
